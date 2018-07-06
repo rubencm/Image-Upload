@@ -50,10 +50,11 @@ services:
             - '@request'
             - '@ext.manager'
             - '@path_helper'
+            - '@dmzx.imageupload.storage'
             - '%core.php_ext%'
             - '%core.root_path%'
             - '%dmzx.imageupload.table.image_upload%'
-            - '@?files.factory'
+            - '@files.factory'
     dmzx.imageupload.core.functions:
         class: dmzx\imageupload\core\functions
         arguments:
@@ -80,3 +81,16 @@ services:
             - '%core.root_path%'
             - '@?files.factory'
             - '@?phpbb.collapsiblecategories.operator'
+    dmzx.imageupload.storage:
+        class: phpbb\storage\storage
+        arguments:
+            - '@storage.adapter.factory'
+            - 'dmzx.imageupload'
+        tags:
+            - { name: storage }
+    dmzx.imageupload.download.controller:
+        class: phpbb\storage\controller\controller
+        arguments:
+            - '@cache'
+            - '@dbal.conn'
+            - '@dmzx.imageupload.storage'
